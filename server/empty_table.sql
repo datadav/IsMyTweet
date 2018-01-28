@@ -1,6 +1,5 @@
 CREATE TABLE IF NOT EXISTS users (
     ID int PRIMARY KEY,
-    ID_Twitter int NOT NULL,
     Name_Twitter varchar(255),
     Avatar text NOT NULL,
     Email varchar(255) NOT NULL UNIQUE,

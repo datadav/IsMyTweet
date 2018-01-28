@@ -1,5 +1,5 @@
 import sqlite3 as lite
-
+import datetime
 
 class SqlDb(object):
     """
@@ -31,6 +31,34 @@ class SqlDb(object):
                     return False
 
         return True
+
+    def is_in_table(self, name_twitter):
+        """
+        Check if this ID is already registered
+        :param id_twitter:
+        :return:
+        """
+        count_cmd = "SELECT COUNT(*) FROM users WHERE Name_Twitter = %s;" % name_twitter
+
+        if self.execute(count_cmd) != 0:
+            return True
+
+        return False
+
+    def insert_in_table(self, name_twitter, email, avatar):
+        """
+        Check if this ID is already registered
+        :param name_twitter:
+        :param email:
+        :param avatar:
+        :return:
+        """
+        ins_cmd = "INSERT INTO users VALUES (0, %s, %s, %s, 0, %s, 1);" % (name_twitter, avatar, email, datetime.datetime())
+
+        if self.execute(ins_cmd) != 0:
+            return True
+
+        return False
 
     def execute_cmd(self, cmd):
         """ Execute command and get return value """

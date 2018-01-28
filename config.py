@@ -6,5 +6,7 @@ SOCKET_SERVER = (NAME_IP, SERVER_PORT)
 NB_SIMUL_CONNECTION = 1 # 1 app flask
 DATA_SIZE_MAX = 8096
 
+DELTA_TIME = 10
+
 DB_FILE_NAME = "my_word.db"
 DB_SCHEMA_TABLE = "empty_table.sql"

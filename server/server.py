@@ -2,21 +2,38 @@ import SqlDb as db
 import config as cfg
 import socket
 import pickle
+import time
+from model_ml import ProcUnit as pu
 from threading import Thread, Lock
 
 mutex = Lock()
 
 
 def looking_for_update():
-    """ Look for update each DELTA_TIME sec for each user of the DB"""
+    """
+    Thread target
+    Look for update each DELTA_TIME sec for each user of the DB
+    1) get mutex for each read in DB
+    2) look in DB for next user
+    3) run model on current user
+    4) send notification when needed
+    """
+    while True:  # No delta time for now
+        mutex.acquire()
+        try:
+            # pu_obj = pu.ProcUnit()
+        finally:
+            mutex.release()
+            time.sleep(cfg.DELTA_TIME)
     return
 
 
-def add_user(dict_user):
+def add_user(sql_db, dict_user):
     """ Add user in DB """
     mutex.acquire()
     try:
-        toto = "toto"  # TODO: unpickle data + send cmd to DB
+        if not sql_db.is_in_table(name_twitter):
+            sql_db.insert_in_table(name_twitter, email, avatar)
     finally:
         mutex.release()
 
@@ -38,6 +55,8 @@ def main():
             print("Impossible to open db file")
 
         # Open thread
+        t = Thread(target=looking_for_update)
+        t.start()
 
         # Open socket
         server_socket = socket.socket()
@@ -48,12 +67,12 @@ def main():
         exit_cmd = False
         while not exit_cmd:
             (client_socket, client_address) = server_socket.accept()
+
             client_cmd = client_socket.recv(cfg.DATA_SIZE_MAX)
-            print("rec : " + str(client_cmd))
-            #data_loaded = pickle.load(client_cmd)
-            #is_user_added = add_user(data_loaded)
-            #if not is_user_added:
-            client_socket.send("Existing user".encode())  # TODO: should send ID instead
+            data_loaded = pickle.load(client_cmd)
+
+            id_user = add_user(sql_db, data_loaded)
+            client_socket.send(str(id_user).encode())
 
     except socket.error as err:
         print('Socket : impossible to open. ErrorCode : ' + err)

@@ -1,7 +1,9 @@
 from flask import Flask, request, redirect, url_for, session, g, flash, \
      render_template
 from flask_oauth import OAuth
- 
+%run config.py
+import socket
+import pickle
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
@@ -11,7 +13,7 @@ SECRET_KEY = 'development key'
 DEBUG = True
 CONSUMER_KEY = "pwxVM2wIn5p2XvM4gsaZJMSJA"
 CONSUMER_SECRET = "j1Azi1x7w76u0fMZoM8OTja67bbTbMG7ApTimJvmcTCrIgjfbZ"
- 
+
 # setup flask
 app = Flask(__name__)
 app.debug = DEBUG
@@ -74,8 +76,22 @@ def validation():
     obj = twyton.verify_credentials(include_email="true", 
         skip_status=1,
         include_entities=0)
-    print(obj["email"])
-    
+    user_dic = {'screen_name': obj['screen_name'],
+                'email': obj['email'],
+                'profile_image': obj['profile_image_url_https']}
+
+    try:
+        my_socket = socket.socket()
+        my_socket.connect(cfg.SOCKET_SERVER)
+        data_sent = pickle.dumps(user_dic)
+        my_socket.send(data_sent)
+        data = my_socket.recv(255)
+        print('The server sent : ' + data.decode())
+    except socket.error as err:
+        print('Server not found.')
+    finally:
+        my_socket.close()
+
     return render_template('validation.html')
 
 

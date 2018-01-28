@@ -1,7 +1,10 @@
 from flask import Flask, request, redirect, url_for, session, g, flash, \
      render_template
 from flask_oauth import OAuth
-%run config.py
+import sys
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+print(sys.path)
+import config as cfg
 import socket
 import pickle
 from sqlalchemy import create_engine, Column, Integer, String

@@ -48,7 +48,7 @@ def index():
  
     access_token = access_token[0]
  
-    return render_template('index.html')
+    return render_template('login.html')
     
 @app.route('/login')
 def login():

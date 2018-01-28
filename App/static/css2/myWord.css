@@ -26,7 +26,7 @@ a {
   font-size: 40px;
   margin-left: 40px;
   margin-top: 15px;
-  font-family: 'Noto Serif' 'Kaushan Script', 'Helvetica Neue', Helvetica, Arial, cursive;
+  font-family:'Noto Serif';
 }
 
 .brand:hover{
@@ -51,7 +51,7 @@ a {
   border-radius: 5px;
   text-decoration: none;
   font-size: 17px;
-  font-family:'Noto Serif' 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family:'Noto Serif' sans-serif;
 }
 
 .topnav a:hover {
@@ -122,13 +122,13 @@ header.masthead {
       margin-bottom: 20px;
       margin-right: 5%
       margin-left:5%;
-      font-family: 'Noto Serif' 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+      font-family: 'Noto Serif', sans-serif; }
     header.masthead .intro-text .intro-heading {
       font-size: 40px;
       font-weight: 800;
       line-height: 40px;
       margin-bottom: 25px;
-      font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+      font-family:'Noto Serif', Helvetica, Arial, sans-serif; }
 
 
       @media (min-width: 768px) {
@@ -142,14 +142,14 @@ header.masthead {
       margin-bottom: 56px;
       margin-left: 10%;
       margin-right: 10%;
-      font-family: 'Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
+      font-family: 'Noto Serif','Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
 
     header.masthead .intro-text .intro-heading {
       font-size: 51px;
       font-weight: 700;
       line-height: 50px;
       margin-bottom: 50px;
-      font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
+      font-family: 'Noto Serif','Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
       margin-right: 10%
       margin-left:16%;	}     }
 
@@ -179,7 +179,7 @@ header.masthead {
 
 .form-text{
   font-size: 17px;
-  font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Noto Serif', 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   color: black;
   left: 0px;
 }

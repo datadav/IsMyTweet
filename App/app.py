@@ -5,7 +5,7 @@ from flask_oauth import OAuth
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
- 
+from twython import Twython
 # configuration
 SECRET_KEY = 'development key'
 DEBUG = True
@@ -64,6 +64,16 @@ def logout():
  
 @app.route('/validation')
 def validation():
+    twyton = Twython(app_key=CONSUMER_KEY,
+                      app_secret=CONSUMER_SECRET,
+                      oauth_token=session['twitter_token'][0],
+                      oauth_token_secret=session['twitter_token'][1])
+
+    obj = twyton.verify_credentials(include_email="true", 
+        skip_status=1,
+        include_entities=0)
+    print(obj["email"])
+    
     return render_template('validation.html')
 
 
@@ -85,7 +95,7 @@ def oauth_authorized(resp):
     )
  
  
-    return redirect(url_for('index'))
+    return redirect(url_for('validation'))
  
  
 if __name__ == '__main__':

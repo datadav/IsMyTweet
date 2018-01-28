@@ -30,11 +30,12 @@ a {
   position: absolute;
   text-decoration: none;
   color: #0084b4;
-  font-size: 35px;
+  font-size: 37px;
   margin-left: 30px;
   margin-top: 100px;
   font-family:'Noto Serif';
-  text-shadow: 5px black;
+  text-shadow: 2px 2px 3px black;
+  font-weight: bold;
 }
 
 .brand:hover{
@@ -60,6 +61,7 @@ a {
   text-decoration: none;
   font-size: 17px;
   font-family:'Noto Serif' sans-serif;
+
 }
 
 .topnav a:hover {
@@ -100,13 +102,17 @@ header.masthead {
       margin-bottom: 20px;
       margin-right: 5%
       margin-left:5%;
-      font-family: 'Noto Serif', sans-serif; }
+      font-family: 'Noto Serif', sans-serif;
+      text-shadow: 2px 2px 3px black;
+       }
     header.masthead .intro-text .intro-heading {
       font-size: 40px;
       font-weight: 800;
       line-height: 40px;
       margin-bottom: 25px;
-      font-family:'Noto Serif', Helvetica, Arial, sans-serif; }
+      font-family:'Noto Serif', Helvetica, Arial, sans-serif; 
+  	  text-shadow: 2px 2px 3px black;
+	}
 
 
       @media (min-width: 768px) {

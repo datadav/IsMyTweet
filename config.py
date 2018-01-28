@@ -1,3 +1,10 @@
 NAME_IP = "localhost"
 SERVER_PORT = 8080
 WEB_SERVICE_PORT = 7979
+
+SOCKET_SERVER = (NAME_IP, SERVER_PORT)
+NB_SIMUL_CONNECTION = 1 # 1 app flask
+DATA_SIZE_MAX = 8096
+
+DB_FILE_NAME = "my_word.db"
+DB_SCHEMA_TABLE = "empty_table.sql"

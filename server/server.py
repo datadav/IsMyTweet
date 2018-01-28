@@ -1,8 +1,11 @@
 import SqlDb as db
+import sys
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
 import config as cfg
 import socket
 import pickle
 import time
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
 from model_ml import ProcUnit as pu
 from threading import Thread, Lock
 
@@ -27,21 +30,23 @@ def looking_for_update(sql_db):
                 (name_twitter, id_twitter) = next_row
                 # use ML model for this user
                 pu_obj = pu.ProcUnit(name_twitter, id_twitter)
-                prev_tweets, new_tweets = pu_obj.tweet_scrap()
-                if id_twitter == 0:
-                    print(prev_tweets[-1])
-                    update_id = int(prev_tweets[-1].id)
-                else:
-                    predict = pu_obj.new_tweets_df(prev_tweets, new_tweets)
-                    if len(predict) != 0:
-                        update_id = int(predict.iloc[-1]['id_tweet'])
+                tw_sc = pu_obj.tweet_scrap()
+                if tw_sc != None:
+                    prev_tweets, new_tweets = tw_sc
+                    if id_twitter == 0:
+                        print(prev_tweets[-1])
+                        update_id = int(prev_tweets[-1].id)
                     else:
-                        update_id = -1
+                        predict = pu_obj.new_tweets_df(prev_tweets, new_tweets)
+                        if len(predict) != 0:
+                            update_id = int(predict.iloc[-1]['id_tweet'])
+                        else:
+                            update_id = -1
 
-                # update id_twitter for next run
-                if update_id != -1:
-                    sql_db.update_id_twitter(update_id)
-                    # Send notification
+                    # update id_twitter for next run
+                    if update_id != -1:
+                        sql_db.update_id_twitter(update_id)
+                        # Send notification
 
         finally:
             mutex.release()
@@ -54,9 +59,12 @@ def add_user(sql_db, dict_user):
     mutex.acquire()
 
     try:
-        name_twitter = 'ABallNeverLies'
-        email = 'toto@toto.com'
-        avatar = 'test'
+        name_twitter = dict_user['screen_name']
+        email = dict_user['email']
+        avatar = dict_user['profile_image']
+        #name_twitter = 'ABallNeverLies'
+        #email = 'toto@toto.com'
+        #avatar = 'test'
         if not sql_db.is_in_table(name_twitter):
             print("is not in table so add it")
             if not sql_db.insert_in_table(name_twitter, email, avatar):
@@ -84,7 +92,7 @@ def main():
         # Open thread
         t = Thread(target=looking_for_update, args=(sql_db,))
         t.start()
-
+        
         # Open socket
         server_socket = socket.socket()
         server_socket.bind(cfg.SOCKET_SERVER)
@@ -97,7 +105,8 @@ def main():
 
             client_cmd = client_socket.recv(cfg.DATA_SIZE_MAX)
             data_loaded = pickle.loads(client_cmd)
-
+            print("Data received : ")
+            print(data_loaded)
             id_user = add_user(sql_db, data_loaded)
             client_socket.send(str(id_user).encode())
 

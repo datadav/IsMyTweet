@@ -34,6 +34,11 @@ class SqlDb(object):
                 except ValueError as msg:
                     return False
 
+            # Initialize nb_rows
+            count_cmd = "SELECT COUNT(*) FROM users;"
+            (nb_count,) = self.execute_cmd(count_cmd)
+            self.nb_rows = nb_count
+
         return True
 
     def get_next_user(self):
@@ -41,6 +46,8 @@ class SqlDb(object):
         sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
         data = self.execute_cmd(sel_cmd)
         print(data)
+        if self.nb_rows == 0:
+            return -1
         return data
 
     def update_id_twitter(self, id_twitter):
@@ -77,9 +84,9 @@ class SqlDb(object):
         :param avatar:
         :return:
         """
-        ins_cmd = "INSERT INTO users VALUES (0, '%s', '%s', '%s', 0, '%s', 1);" \
-                  % (name_twitter, avatar, email, datetime.datetime.now())
-
+        ins_cmd = "INSERT INTO users VALUES (%d, '%s', '%s', '%s', 0, '%s', 1);" \
+                  % (self.nb_rows, name_twitter, avatar, email, datetime.datetime.now())
+        print(ins_cmd)
         value = self.execute_cmd(ins_cmd)
         self.nb_rows += 1
         if value != 0:

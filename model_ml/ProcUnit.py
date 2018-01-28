@@ -148,7 +148,7 @@ class ProcUnit(object):
         self.parser.vocab["not"].is_stop = False
         self.parser.vocab["cannot"].is_stop = False
 
-        self.train = pd.read_csv("/Volumes/Transcend/Kaggle/train2.csv") ### toxic dataset
+        self.train = pd.read_csv("../model_ml/data_ref/train.csv") ### toxic dataset
 
         self.consumer_key = 'SSqTVGJ5RTb8cfvp14gULqULn'
         self.consumer_secret = 'ZNGNneoRIFKg3j05M1NOabgvLzfHZXknfuARxYJjbIg1iUqotI'
@@ -161,10 +161,16 @@ class ProcUnit(object):
         auth.set_access_token(self.access_token, self.access_secret)
         api = tweepy.API(auth) 
         auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        prev_tweets = api.user_timeline(screen_name = self.name_twitter , count = 1000,
-                    max_id=self.id_until, include_rts = False  ) #include_rts = True)
-        new_tweets = api.user_timeline(screen_name = self.name_twitter, count = 1000,
-                        since_id=self.id_until, include_rts = False   )
+        if self.id_until == 0:
+            prev_tweets = api.user_timeline(screen_name = self.name_twitter , count = 1000,
+                            include_rts = False  ) #include_rts = True)
+            new_tweets = api.user_timeline(screen_name = self.name_twitter, count = 1000,
+                            include_rts = False   )
+        else:
+            prev_tweets = api.user_timeline(screen_name=self.name_twitter, count=1000,
+                                            max_id=self.id_until, include_rts=False)  # include_rts = True)
+            new_tweets = api.user_timeline(screen_name=self.name_twitter, count=1000,
+                                           since_id=self.id_until, include_rts=False)
         if len(new_tweets) == 0:
             print("no new tweets to analyze")
         elif len(prev_tweets) > 1:
@@ -178,10 +184,9 @@ class ProcUnit(object):
             return True
         except ValueError:
             return False
+
     def replace_number(self, sentence_list, replace = "numeric"):
         return [x  if not self.is_number(x) else replace for x in sentence_list]
-
-
 
     def new_tweets_df(self, prev_tweets, new_tweets):
         def clean(comment):
@@ -213,10 +218,9 @@ class ProcUnit(object):
             new_tweets_df.comment_text.apply(clean)))[:,1]
         return new_tweets_df
 
-### petit test 
-proc_test = ProcUnit('ABallNeverLies',957585522049896448)
+"""proc_test = ProcUnit('ABallNeverLies',957585522049896448)
 prev_tweets, new_tweets = proc_test.tweet_scrap()
-print(proc_test.new_tweets_df(prev_tweets, new_tweets))
+print(proc_test.new_tweets_df(prev_tweets, new_tweets))"""
 
 
 

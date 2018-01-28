@@ -1,5 +1,7 @@
 import config as cfg
 import socket
+import pickle
+
 
 def main():
     i = 0
@@ -8,9 +10,10 @@ def main():
             my_socket = socket.socket()
             my_socket.connect(cfg.SOCKET_SERVER)
 
-            test_msg = "test n°+"+str(i)
+            test_msg = {"test":"test n°+"+str(i)}
             i += 1
-            my_socket.send(test_msg.encode())
+            data_sent = pickle.dumps(test_msg)
+            my_socket.send(data_sent)
 
             data = my_socket.recv(255)
 

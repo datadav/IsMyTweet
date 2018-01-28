@@ -45,10 +45,26 @@
             My Word analyse your previous messages and detect instantally if someone other than you would posted a message.
            </div>
 
-      <div class="container-fluid">
-  <!-- Trigger the modal with a button -->
+
+<!-- Twitter Connect button -->
+  <div class="container-fluid">
+
+    {% block body %}
+
+       <a href="{{ url_for('login') }}">
         <button type="button" class="button button2" data-toggle="modal" data-target="#myModal">Twitter Connect</button>
+      </a>
+
+    {% if session['screen_name'] %}
+
+      Hello {{ session['screen_name'] }}!  
+
+    {% else %}
+      {% endif %}
+      {% endblock %}
+
       </div>
+
   </header>
 
     </body>

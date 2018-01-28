@@ -19,9 +19,9 @@ a {
 #logo{
 	position: absolute;
 	background: url('../images/myWordLogo.png');
-	background-size: 6.5em;
-	width:6.5em;
-	height:6.5em;
+	background-size: 4.5em;
+	width:4.5em;
+	height:4.5em;
 	float:left;
 	margin-left: 60px;
 } 
@@ -30,7 +30,7 @@ a {
   position: absolute;
   text-decoration: none;
   color: #0084b4;
-  font-size: 37px;
+  font-size: 25px;
   margin-left: 30px;
   margin-top: 100px;
   font-family:'Noto Serif';

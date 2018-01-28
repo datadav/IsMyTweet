@@ -3,7 +3,6 @@ from flask import Flask, request, redirect, url_for, session, g, flash, \
 from flask_oauth import OAuth
 import sys
 sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
-print(sys.path)
 import config as cfg
 import socket
 import pickle
@@ -11,9 +10,10 @@ from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 from twython import Twython
+
 # configuration
 SECRET_KEY = 'development key'
-DEBUG = True
+DEBUG = False
 CONSUMER_KEY = "pwxVM2wIn5p2XvM4gsaZJMSJA"
 CONSUMER_SECRET = "j1Azi1x7w76u0fMZoM8OTja67bbTbMG7ApTimJvmcTCrIgjfbZ"
 

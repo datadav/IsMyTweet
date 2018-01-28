@@ -49,7 +49,8 @@ def index():
     access_token = access_token[0]
  
     return render_template('login.html')
- 
+
+
 @app.route('/login')
 def login():
     return twitter.authorize(callback=url_for('oauth_authorized',
@@ -62,7 +63,11 @@ def logout():
     flash('You were signed out')
     return redirect(request.referrer or url_for('index'))
  
- 
+@app.route('/validation')
+def validation():
+    return render_template('validation.html')
+
+
 @app.route('/oauth-authorized')
 @twitter.authorized_handler
 def oauth_authorized(resp):

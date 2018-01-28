@@ -1,9 +1,10 @@
-from flask import Flask
-app = Flask(__name__)
+from flask import request, url_for, render_template
+from flask_api import FlaskAPI, status, exceptions
+app = FlaskAPI(__name__)
 
 @app.route('/')
 def hello_world():
-    return 'Hello, World!'
+    return render_template('index.html')	
 
 
 if __name__ == "__main__":

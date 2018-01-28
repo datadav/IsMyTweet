@@ -2,10 +2,13 @@
 *Authors : Alexis AMSELLEM, David BLOCH, David Jacob COHEN, David COHEN*
 
 
-A installer :
+## A installer :
 
-pip install flask Flask-API flask_oauth urlparse twython sqlalchemy tweepy sklearn scipy
+```
+$pip install flask Flask-API flask_oauth urlparse twython lalchemy tweepy sklearn scipy
 
-conda install spacy nltk
+$ conda install spacy nltk
 
-pip install git+https://github.com/erikavaris/tokenizer.git
+$ pip install git+https://github.com/erikavaris/tokenizer.git
+```
+

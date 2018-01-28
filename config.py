@@ -1,0 +1,3 @@
+NAME_IP = "localhost"
+SERVER_PORT = 8080
+WEB_SERVICE_PORT = 7979

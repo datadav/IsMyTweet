@@ -49,8 +49,7 @@ def index():
     access_token = access_token[0]
  
     return render_template('login.html')
-
-
+    
 @app.route('/login')
 def login():
     return twitter.authorize(callback=url_for('oauth_authorized',
@@ -91,4 +90,3 @@ def oauth_authorized(resp):
  
 if __name__ == '__main__':
     app.run()
-

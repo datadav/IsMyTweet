@@ -5,10 +5,12 @@ from flask_oauth import OAuth
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import scoped_session, sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
- 
+from twython import Twython
 # configuration
 SECRET_KEY = 'development key'
 DEBUG = True
+CONSUMER_KEY = "pwxVM2wIn5p2XvM4gsaZJMSJA"
+CONSUMER_SECRET = "j1Azi1x7w76u0fMZoM8OTja67bbTbMG7ApTimJvmcTCrIgjfbZ"
  
 # setup flask
 app = Flask(__name__)
@@ -31,8 +33,8 @@ twitter = oauth.remote_app('twitter',
     # user interface on the twitter side.
     authorize_url='https://api.twitter.com/oauth/authorize',
     # the consumer keys from the twitter application registry.
-    consumer_key="pwxVM2wIn5p2XvM4gsaZJMSJA",
-    consumer_secret="j1Azi1x7w76u0fMZoM8OTja67bbTbMG7ApTimJvmcTCrIgjfbZ"
+    consumer_key= CONSUMER_KEY,
+    consumer_secret= CONSUMER_SECRET
 )
  
  
@@ -44,7 +46,7 @@ def get_twitter_token(token=None):
 def index():
     access_token = session.get('access_token')
     if access_token is None:
-        return redirect(url_for('login'))
+        return render_template('login.html')
  
     access_token = access_token[0]
  
@@ -64,6 +66,16 @@ def logout():
  
 @app.route('/validation')
 def validation():
+    twyton = Twython(app_key=CONSUMER_KEY,
+                      app_secret=CONSUMER_SECRET,
+                      oauth_token=session['twitter_token'][0],
+                      oauth_token_secret=session['twitter_token'][1])
+
+    obj = twyton.verify_credentials(include_email="true", 
+        skip_status=1,
+        include_entities=0)
+    print(obj["email"])
+    
     return render_template('validation.html')
 
 
@@ -85,7 +97,7 @@ def oauth_authorized(resp):
     )
  
  
-    return redirect(url_for('index'))
+    return redirect(url_for('validation'))
  
  
 if __name__ == '__main__':

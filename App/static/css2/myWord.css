@@ -134,7 +134,8 @@ header.masthead {
       @media (min-width: 768px) {
     header.masthead .intro-text {
     padding-top: 275px;
-    padding-bottom: 160px; }
+    padding-bottom: 10px; 
+}
     header.masthead .intro-text .intro-lead-in {
       font-size: 30px;
       font-style: italic;
@@ -158,8 +159,8 @@ header.masthead {
           background-color: #0084b4; 
           border-color: #0084b4;
           color: white; 
-          width: 230px;
-          height: 70px;
+          width: 200px;
+          height: 50px;
           font-size: 18px;
           font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
           font-weight: 700px;
@@ -176,21 +177,4 @@ header.masthead {
           color: #0084b4;
       }
 
-
-.form-text{
-  font-size: 17px;
-  font-family: 'Noto Serif', 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-  color: black;
-  left: 0px;
-}
-
-input[type=text], select {
-    width: 100%;
-    padding: 12px 20px;
-    margin: 8px 0;
-    display: inline-block;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    box-sizing: border-box;
-  }
 

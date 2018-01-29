@@ -95,7 +95,10 @@ def validation():
     finally:
         my_socket.close()
 
-    return render_template('validation.html')
+    return render_template('validation.html', 
+        screen_name=user_dic['screen_name'], 
+        email=user_dic['email'],
+        profile_image=user_dic['profile_image'])
 
 
 @app.route('/oauth-authorized')

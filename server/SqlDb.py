@@ -44,22 +44,24 @@ class SqlDb(object):
 
     def get_next_user(self):
         """ Get next entry of table """
-        sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
-        print("id :"+str(self.seen_idx))
-        print("nb_rows : "+str(self.nb_rows))
-        data = self.execute_cmd(sel_cmd)
-        print(data)
-        content = []
-        if data[1] != 0:
-            try:
-                with open('db/'+str(self.seen_idx)+'.txt', 'rb') as fp:
-                    content = pickle.loads(fp.read())
-            finally:
-                fp.close()
+        if self.nb_rows != 0:
+            sel_cmd = "SELECT Name_Twitter, Email, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
+            print("id :"+str(self.seen_idx))
+            print("nb_rows : "+str(self.nb_rows))
+            data = self.execute_cmd(sel_cmd)
+            print(data)
+            content = []
+            if data[2] != 0:
+                try:
+                    with open('db/'+str(self.seen_idx)+'.txt', 'rb') as fp:
+                        content = pickle.loads(fp.read())
+                finally:
+                    fp.close()
 
-        if self.nb_rows == 0:
-            return -1
-        return data, content
+            if self.nb_rows == 0:
+                return -1
+            return data, content
+        return -1
 
     def update_id_twitter(self, id_twitter):
         """ Update ID Twitter """

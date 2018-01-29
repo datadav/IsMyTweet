@@ -32,7 +32,7 @@ def looking_for_update(sql_db):
             # look in DB for next user
             next_row = sql_db.get_next_user()
             if next_row != -1:
-                (name_twitter, last_id_twitter), last_tweets = next_row
+                (name_twitter, email, last_id_twitter), last_tweets = next_row
                 print("nb tweets : " + str(len(last_tweets)))
                 # use ML model for this user
                 pu_obj = pu.ProcUnit(name_twitter, last_id_twitter)
@@ -60,6 +60,9 @@ def looking_for_update(sql_db):
                     to_notify = predict[predict.prediction < cfg.THRESHOLD]
                     for i in range(len(to_notify)):
                         print(to_notify.iloc[i].comment_text, to_notify.iloc[i].prediction) # TODO: replace by fct
+
+                        notif = ntf()
+                        notif.send_email(email, to_notify.iloc[i].comment_text)
 
                 sql_db.update_idx()
         finally:
@@ -101,8 +104,6 @@ def main():
         TODO : 
             - message scrapped saved in DB ?
     """
-    notif = ntf()
-    notif.send_email("davidbloch@hotmail.fr","TWEET MAUVAIS")
     try:
         # Open DB File
         sql_db = db.SqlDb(cfg.DB_FILE_NAME, cfg.DB_SCHEMA_TABLE)

@@ -11,6 +11,7 @@ from threading import Thread, Lock
 import json
 
 LAST_TWEET_ID = 0
+ID_MSG = 0
 mutex = Lock()
 
 
@@ -29,23 +30,23 @@ def looking_for_update(sql_db):
             # look in DB for next user
             next_row = sql_db.get_next_user()
             if next_row != -1:
-                (name_twitter, last_id_twitter, last_tweets) = next_row
+                (name_twitter, last_id_twitter), last_tweets = next_row
                 # use ML model for this user
                 pu_obj = pu.ProcUnit(name_twitter, last_id_twitter)
                 # if no tweet, get all tweet
                 if last_id_twitter == 0:
-                    list_tweets = pu_obj.get_all_tweets()
-                    if len(list_tweets) != 0:
-                        update_id = int(list_tweets[LAST_TWEET_ID]['id_msg'])
-                    else:
+                    list_tweets, update_id = pu_obj.get_all_tweets()
+                    if len(list_tweets) == 0:
                         update_id = -1
                 else:
                     prev_tweets = last_tweets
-                    new_tweets = pu_obj.get_new_tweets(last_id_twitter)
+                    new_tweets, update_id = pu_obj.get_new_tweets(last_id_twitter)
                     if len(new_tweets) != 0:
                         predict = pu_obj.new_tweets_df(prev_tweets, new_tweets)
                         list_tweets = prev_tweets + new_tweets
-                        update_id = int(predict.iloc[LAST_TWEET_ID]['id_tweet'])
+                        #update_id = int(predict.iloc[LAST_TWEET_ID]['id_tweet'])
+                        print("predict")
+                        print(predict)
                     else:
                         update_id = -1
 

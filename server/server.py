@@ -1,13 +1,13 @@
 import SqlDb as db
 import sys
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
 import config as cfg
 import socket
 import pickle
 import time
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\notification')
-from email_sending import notification as ntf
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\notification')
+from notification.email_sending import notification as ntf
 from model_ml import ProcUnit as pu
 from threading import Thread, Lock
 import json
@@ -36,6 +36,7 @@ def looking_for_update(sql_db):
                 print("nb tweets : " + str(len(last_tweets)))
                 # use ML model for this user
                 pu_obj = pu.ProcUnit(name_twitter, last_id_twitter)
+                predict = []
                 # if no tweet, get all tweet
                 if last_id_twitter == 0:
                     list_tweets, update_id = pu_obj.get_all_tweets()
@@ -57,12 +58,14 @@ def looking_for_update(sql_db):
                     sql_db.update_list_tweet(list_tweets)
                     sql_db.update_id_twitter(update_id)
                     # Send notification
-                    to_notify = predict[predict.prediction < cfg.THRESHOLD]
-                    for i in range(len(to_notify)):
-                        print(to_notify.iloc[i].comment_text, to_notify.iloc[i].prediction) # TODO: replace by fct
+                    if len(predict) != 0:
+                        to_notify = predict[predict.prediction < cfg.THRESHOLD]
+                        for i in range(len(to_notify)):
+                            print("mail sent")
+                            print(to_notify.iloc[i].comment_text, to_notify.iloc[i].prediction)
 
-                        notif = ntf()
-                        notif.send_email(email, to_notify.iloc[i].comment_text)
+                            notif = ntf()
+                            notif.send_email(email, to_notify.iloc[i].comment_text)
 
                 sql_db.update_idx()
         finally:
@@ -105,6 +108,9 @@ def main():
             - message scrapped saved in DB ?
     """
     try:
+
+        notif = ntf()
+
         # Open DB File
         sql_db = db.SqlDb(cfg.DB_FILE_NAME, cfg.DB_SCHEMA_TABLE)
         if not sql_db:

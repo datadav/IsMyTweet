@@ -1,14 +1,16 @@
 import SqlDb as db
 import sys
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
 import config as cfg
 import socket
 import pickle
 import time
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
 from model_ml import ProcUnit as pu
 from threading import Thread, Lock
+import json
 
+LAST_TWEET_ID = 0
 mutex = Lock()
 
 
@@ -27,26 +29,32 @@ def looking_for_update(sql_db):
             # look in DB for next user
             next_row = sql_db.get_next_user()
             if next_row != -1:
-                (name_twitter, id_twitter) = next_row
+                (name_twitter, last_id_twitter, last_tweets) = next_row
                 # use ML model for this user
-                pu_obj = pu.ProcUnit(name_twitter, id_twitter)
-                tw_sc = pu_obj.tweet_scrap()
-                if tw_sc != None:
-                    prev_tweets, new_tweets = tw_sc
-                    if id_twitter == 0:
-                        print(prev_tweets[-1])
-                        update_id = int(prev_tweets[-1].id)
+                pu_obj = pu.ProcUnit(name_twitter, last_id_twitter)
+                # if no tweet, get all tweet
+                if last_id_twitter == 0:
+                    list_tweets = pu_obj.get_all_tweets()
+                    if len(list_tweets) != 0:
+                        update_id = int(list_tweets[LAST_TWEET_ID]['id_msg'])
                     else:
+                        update_id = -1
+                else:
+                    prev_tweets = last_tweets
+                    new_tweets = pu_obj.get_new_tweets(last_id_twitter)
+                    if len(new_tweets) != 0:
                         predict = pu_obj.new_tweets_df(prev_tweets, new_tweets)
-                        if len(predict) != 0:
-                            update_id = int(predict.iloc[-1]['id_tweet'])
-                        else:
-                            update_id = -1
+                        list_tweets = prev_tweets + new_tweets
+                        update_id = int(predict.iloc[LAST_TWEET_ID]['id_tweet'])
+                    else:
+                        update_id = -1
 
-                    # update id_twitter for next run
-                    if update_id != -1:
-                        sql_db.update_id_twitter(update_id)
-                        # Send notification
+                # update id_twitter for next run
+                if update_id != -1:
+                    sql_db.update_list_tweet(list_tweets)
+                    sql_db.update_id_twitter(update_id)
+                    sql_db.update_idx()
+                    # Send notification
 
         finally:
             mutex.release()
@@ -59,12 +67,12 @@ def add_user(sql_db, dict_user):
     mutex.acquire()
 
     try:
-        name_twitter = dict_user['screen_name']
-        email = dict_user['email']
-        avatar = dict_user['profile_image']
-        #name_twitter = 'ABallNeverLies'
-        #email = 'toto@toto.com'
-        #avatar = 'test'
+        #name_twitter = dict_user['screen_name']
+        #email = dict_user['email']
+        #avatar = dict_user['profile_image']
+        name_twitter = 'ABallNeverLies'
+        email = 'toto@toto.com'
+        avatar = 'test'
         if not sql_db.is_in_table(name_twitter):
             print("is not in table so add it")
             if not sql_db.insert_in_table(name_twitter, email, avatar):

@@ -1,5 +1,6 @@
 import sqlite3 as lite
 import datetime
+import pickle
 
 
 class SqlDb(object):
@@ -43,7 +44,7 @@ class SqlDb(object):
 
     def get_next_user(self):
         """ Get next entry of table """
-        sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
+        sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet, Tweet_List FROM users WHERE ID = %d" % self.seen_idx
         data = self.execute_cmd(sel_cmd)
         print(data)
         if self.nb_rows == 0:
@@ -53,6 +54,13 @@ class SqlDb(object):
     def update_id_twitter(self, id_twitter):
         """ Update ID Twitter """
         upd_cmd = "UPDATE users SET Id_Last_Tweet = %d WHERE ID = %d;" % (id_twitter, self.seen_idx)
+        data = self.execute_cmd(upd_cmd)
+        # TODO : check if error
+        return True
+
+    def update_list_tweet(self, list_tweet):
+        """ Update ID Twitter """
+        upd_cmd = "UPDATE users SET Tweet_List = \"%s\" WHERE ID = %d;" % (str(list_tweet).replace('"', '\''), self.seen_idx)
         data = self.execute_cmd(upd_cmd)
         # TODO : check if error
         return True
@@ -84,7 +92,7 @@ class SqlDb(object):
         :param avatar:
         :return:
         """
-        ins_cmd = "INSERT INTO users VALUES (%d, '%s', '%s', '%s', 0, '%s', 1);" \
+        ins_cmd = "INSERT INTO users VALUES (%d, '%s', '%s', '%s', 0, '%s', 1, '');" \
                   % (self.nb_rows, name_twitter, avatar, email, datetime.datetime.now())
         print(ins_cmd)
         value = self.execute_cmd(ins_cmd)

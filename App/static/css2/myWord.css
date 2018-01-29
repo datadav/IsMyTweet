@@ -8,7 +8,8 @@ body {
 }
 
 p {
-  line-height: 1.75; }
+	font-size: 20px;
+    line-height: 1.75; }
 
 a {
   color: #0084b4; }
@@ -105,7 +106,7 @@ header.masthead {
       margin-right: 5%
       margin-left:5%;
       font-family: 'Noto Serif', sans-serif;
-      text-shadow: 2px 2px 3px black;
+      text-shadow: 1px 1px 3px black;
        }
     header.masthead .intro-text .intro-heading {
       font-size: 40px;
@@ -114,6 +115,7 @@ header.masthead {
       margin-bottom: 25px;
       font-family:'Noto Serif', Helvetica, Arial, sans-serif; 
 	}
+
 
 
       @media (min-width: 768px) {

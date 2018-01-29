@@ -172,8 +172,8 @@ class ProcUnit(object):
             new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200, max_id=oldest)
             alltweets.extend(new_tweets)
             oldest = alltweets[-1].id - 1
-        outtweets = [{'id_msg':tweet.id_str, 'date_msg':tweet.created_at, 'list_msg':tweet.text} for tweet in alltweets]
-        return outtweets
+        outtweets = [(tweet.id_str, tweet.text) for tweet in alltweets]
+        return outtweets, alltweets[0].id
 
     def get_new_tweets(self, since_id):
         alltweets = []
@@ -185,9 +185,9 @@ class ProcUnit(object):
                 new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200, max_id=oldest, since_id=since_id)
                 alltweets.extend(new_tweets)
                 oldest = alltweets[-1].id - 1
-            outtweets = [[tweet.id_str, tweet.created_at, tweet.text] for tweet in alltweets]
+            outtweets = [(tweet.id_str, tweet.text) for tweet in alltweets] , alltweets[0].id
         else:
-            outtweets = []
+            outtweets = [], -1
         return outtweets
 
     def is_number(self, s):
@@ -206,15 +206,15 @@ class ProcUnit(object):
             comment=re.sub("\[\[.*\]","",comment)
             words = self.T.tokenize(comment) 
             words = " ".join([self.APPO_dict[word] if word in self.APPO_dict else word for word in words])
-            words = [token.lemma_  for token in self.parser(words) if (not token.is_stop and not token.is_punct and
-                                                                    not token.is_space) ]
+            words = [token.lemma_ for token in self.parser(words) if (not token.is_stop and not token.is_punct and
+                                                                      not token.is_space)]
             words = [word for word in words if (word != "s" and word != "=" and word != ">")]
             clean_sent = " ".join(self.replace_number(words))
-            return(clean_sent)
-        list_train_pos = [tweet.text for tweet in prev_tweets]
-        list_tweet_pred = [tweet.text for tweet in new_tweets]
+            return clean_sent
+        list_train_pos = [tweet_msg for (tweet_id,tweet_msg) in prev_tweets]
+        list_tweet_pred = [tweet_msg for (tweet_id, tweet_msg) in new_tweets]
         new_tweets_df = pd.DataFrame(list_tweet_pred, columns=["comment_text"])
-        new_tweets_df["id_tweet"] = [tweet.id for tweet in new_tweets]
+        new_tweets_df["id_tweet"] = [tweet_msg for (tweet_id, tweet_msg) in new_tweets]
         train_pos = pd.DataFrame(list_train_pos, columns=["comment_text"])
         train_neg = self.train.sample(frac = 1)[:4*len(prev_tweets)][["comment_text"]]
         train_pos["label"] = 1

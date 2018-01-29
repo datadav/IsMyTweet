@@ -44,12 +44,22 @@ class SqlDb(object):
 
     def get_next_user(self):
         """ Get next entry of table """
-        sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet, Tweet_List FROM users WHERE ID = %d" % self.seen_idx
+        sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
+        print("id :"+str(self.seen_idx))
+        print("nb_rows : "+str(self.nb_rows))
         data = self.execute_cmd(sel_cmd)
         print(data)
+        content = []
+        if data[1] != 0:
+            try:
+                with open('db/'+str(self.seen_idx)+'.txt', 'rb') as fp:
+                    content = pickle.loads(fp.read())
+            finally:
+                fp.close()
+
         if self.nb_rows == 0:
             return -1
-        return data
+        return data, content
 
     def update_id_twitter(self, id_twitter):
         """ Update ID Twitter """
@@ -60,15 +70,25 @@ class SqlDb(object):
 
     def update_list_tweet(self, list_tweet):
         """ Update ID Twitter """
-        upd_cmd = "UPDATE users SET Tweet_List = \"%s\" WHERE ID = %d;" % (str(list_tweet).replace('"', '\''), self.seen_idx)
-        data = self.execute_cmd(upd_cmd)
+        #upd_cmd = "UPDATE users SET Tweet_List = \"%s\" WHERE ID = %d;" % (str(list_tweet), self.seen_idx)
+        #print(upd_cmd)
+        #data = self.execute_cmd(upd_cmd)
+        try:
+            with open('db/'+str(self.seen_idx)+'.txt', 'wb+') as fp:
+                fp.write(pickle.dumps(list_tweet))
+        finally:
+            fp.close()
+
         # TODO : check if error
         return True
 
     def update_idx(self):
         """ Update index to look at the next row """
-        if self.seen_idx == self.nb_rows:
+        if self.seen_idx == self.nb_rows - 1:
             self.seen_idx = 0
+        else:
+            self.seen_idx += 1
+
         return True
 
     def is_in_table(self, name_twitter):

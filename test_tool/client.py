@@ -5,7 +5,7 @@ import pickle
 
 def main():
     i = 0
-    while True:
+    while i!=1:
         try:
             my_socket = socket.socket()
             my_socket.connect(cfg.SOCKET_SERVER)

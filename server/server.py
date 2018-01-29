@@ -31,6 +31,7 @@ def looking_for_update(sql_db):
             next_row = sql_db.get_next_user()
             if next_row != -1:
                 (name_twitter, last_id_twitter), last_tweets = next_row
+                print("nb tweets : " + str(len(last_tweets)))
                 # use ML model for this user
                 pu_obj = pu.ProcUnit(name_twitter, last_id_twitter)
                 # if no tweet, get all tweet
@@ -44,7 +45,6 @@ def looking_for_update(sql_db):
                     if len(new_tweets) != 0:
                         predict = pu_obj.new_tweets_df(prev_tweets, new_tweets)
                         list_tweets = prev_tweets + new_tweets
-                        #update_id = int(predict.iloc[LAST_TWEET_ID]['id_tweet'])
                         print("predict")
                         print(predict)
                     else:
@@ -54,9 +54,12 @@ def looking_for_update(sql_db):
                 if update_id != -1:
                     sql_db.update_list_tweet(list_tweets)
                     sql_db.update_id_twitter(update_id)
-                    sql_db.update_idx()
                     # Send notification
+                    to_notify = predict[predict.prediction < cfg.THRESHOLD]
+                    for i in range(len(to_notify)):
+                        print(to_notify.iloc[i].comment_text, to_notify.iloc[i].prediction) # TODO: replace by fct
 
+                sql_db.update_idx()
         finally:
             mutex.release()
             time.sleep(cfg.DELTA_TIME)
@@ -68,12 +71,16 @@ def add_user(sql_db, dict_user):
     mutex.acquire()
 
     try:
-        #name_twitter = dict_user['screen_name']
-        #email = dict_user['email']
-        #avatar = dict_user['profile_image']
-        name_twitter = 'ABallNeverLies'
-        email = 'toto@toto.com'
-        avatar = 'test'
+        name_twitter = dict_user['screen_name']
+        email = dict_user['email']
+        avatar = dict_user['profile_image']
+        #name_twitter = 'ABallNeverLies'
+        #email = 'toto@toto.com'
+        #avatar = 'test'
+
+        #name_twitter = 'T0toTaTa'
+        #email = 'totoRREEE@toto.com'
+        #avatar = 'testRREE'
         if not sql_db.is_in_table(name_twitter):
             print("is not in table so add it")
             if not sql_db.insert_in_table(name_twitter, email, avatar):

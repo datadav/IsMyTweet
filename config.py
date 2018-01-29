@@ -8,5 +8,7 @@ DATA_SIZE_MAX = 8096
 
 DELTA_TIME = 10
 
+THRESHOLD = 0.3
+
 DB_FILE_NAME = "my_word.db"
 DB_SCHEMA_TABLE = "empty_table.sql"

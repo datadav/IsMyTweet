@@ -45,6 +45,8 @@ class SqlDb(object):
     def get_next_user(self):
         """ Get next entry of table """
         sel_cmd = "SELECT Name_Twitter, Id_Last_Tweet FROM users WHERE ID = %d" % self.seen_idx
+        print("id :"+str(self.seen_idx))
+        print("nb_rows : "+str(self.nb_rows))
         data = self.execute_cmd(sel_cmd)
         print(data)
         content = []
@@ -82,8 +84,11 @@ class SqlDb(object):
 
     def update_idx(self):
         """ Update index to look at the next row """
-        if self.seen_idx == self.nb_rows:
+        if self.seen_idx == self.nb_rows - 1:
             self.seen_idx = 0
+        else:
+            self.seen_idx += 1
+
         return True
 
     def is_in_table(self, name_twitter):

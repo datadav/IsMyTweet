@@ -16,7 +16,6 @@ from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer, Tf
 from sklearn.cross_validation import cross_val_predict, cross_val_score
 
 
-
 class ProcUnit(object):
 
     def __init__(self, name_twitter, id_until):
@@ -155,28 +154,41 @@ class ProcUnit(object):
         self.access_token = '946335506475962368-vY2nm6lL3g1YafAH7xRRNUPomCgOn9W'
         self.access_secret = 'J1RiXEo5nb062wCDgMftv9q34rATkvtQR132gTJB42ROZ'
 
+        # create an OAuthHandler instance
+        # Twitter requires all requests to use OAuth for authentication
+        self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
+        self.auth.set_access_token(self.access_token, self.access_secret)
 
-    def tweet_scrap(self):
-        auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        auth.set_access_token(self.access_token, self.access_secret)
-        api = tweepy.API(auth) 
-        auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
-        if self.id_until == 0:
-            prev_tweets = api.user_timeline(screen_name = self.name_twitter , count = 1000,
-                            include_rts = False  ) #include_rts = True)
-            new_tweets = api.user_timeline(screen_name = self.name_twitter, count = 1000,
-                            include_rts = False   )
+        # Construct the API instance
+        self.api = tweepy.API(self.auth)  # create an API object
+        self.auth = tweepy.OAuthHandler(self.consumer_key, self.consumer_secret)
+
+    def get_all_tweets(self):
+        alltweets = []
+        new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200)
+        alltweets.extend(new_tweets)
+        oldest = alltweets[-1].id - 1
+        while len(new_tweets) > 0:
+            new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200, max_id=oldest)
+            alltweets.extend(new_tweets)
+            oldest = alltweets[-1].id - 1
+        outtweets = [{'id_msg':tweet.id_str, 'date_msg':tweet.created_at, 'list_msg':tweet.text} for tweet in alltweets]
+        return outtweets
+
+    def get_new_tweets(self, since_id):
+        alltweets = []
+        new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200, since_id=since_id)
+        alltweets.extend(new_tweets)
+        if len(alltweets) != 0:
+            oldest = alltweets[-1].id - 1
+            while len(new_tweets) > 0:
+                new_tweets = self.api.user_timeline(screen_name=self.name_twitter, count=200, max_id=oldest, since_id=since_id)
+                alltweets.extend(new_tweets)
+                oldest = alltweets[-1].id - 1
+            outtweets = [[tweet.id_str, tweet.created_at, tweet.text] for tweet in alltweets]
         else:
-            prev_tweets = api.user_timeline(screen_name=self.name_twitter, count=1000,
-                                            max_id=self.id_until, include_rts=False)  # include_rts = True)
-            new_tweets = api.user_timeline(screen_name=self.name_twitter, count=1000,
-                                           since_id=self.id_until, include_rts=False)
-        if len(new_tweets) == 0:
-            print("no new tweets to analyze")
-        elif len(prev_tweets) > 1:
-            return prev_tweets, new_tweets
-        else:
-            return (prev_tweets, [new_tweets])
+            outtweets = []
+        return outtweets
 
     def is_number(self, s):
         try:

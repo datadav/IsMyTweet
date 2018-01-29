@@ -5,7 +5,7 @@
 ## A installer :
 
 ```
-$ pip install flask Flask-API flask_oauth urlparse twython lalchemy tweepy sklearn scipy
+$ pip install flask Flask-API Flask-OAuth urllib twython lalchemy tweepy sklearn scipy
 
 $ conda install spacy nltk
 

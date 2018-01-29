@@ -32,8 +32,8 @@ a {
   text-decoration: none;
   color: #0084b4;
   font-size: 25px;
-  margin-left: 30px;
-  margin-top: 130px;
+  margin-left: 35px;
+  margin-top: 100px;
   font-family:'Noto Serif';
   font-weight: bold;
 }
@@ -125,7 +125,7 @@ header.masthead {
       font-size: 30px;
       font-style: italic;
       line-height: 30px;
-      margin-bottom: 56px;
+      margin-bottom: 136px;
       margin-left: 10%;
       margin-right: 10%;
       font-family: 'Noto Serif','Droid Serif', 'Helvetica Neue', Helvetica, Arial, sans-serif; }
@@ -134,14 +134,13 @@ header.masthead {
       font-size: 51px;
       font-weight: 700;
       line-height: 50px;
-      margin-bottom: 50px;
+      margin-bottom: 30px;
       font-family: 'Noto Serif','Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif; 
       margin-right: 10%
       margin-left:16%;
-      margin-top: 40px;	
+      margin-top: 30px;	
   }     
   }
-
 
        .button2 {
           background-color: #0084b4; 
@@ -149,9 +148,9 @@ header.masthead {
           color: white; 
           width: 200px;
           height: 50px;
-          font-size: 18px;
+          font-size: 21px;
           font-family: 'Montserrat', 'Helvetica Neue', Helvetica, Arial, sans-serif;
-          font-weight: 700px;
+          font-weight: bold, 700px;
           border-radius: .25em;
           bottom: 250px;
           border: 1px solid transparent;

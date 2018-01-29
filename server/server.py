@@ -1,11 +1,13 @@
 import SqlDb as db
 import sys
-#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
 import config as cfg
 import socket
 import pickle
 import time
-#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\notification')
+from email_sending import notification as ntf
 from model_ml import ProcUnit as pu
 from threading import Thread, Lock
 import json
@@ -91,6 +93,8 @@ def main():
         TODO : 
             - message scrapped saved in DB ?
     """
+    notif = ntf()
+    notif.send_email("davidbloch@hotmail.fr","TWEET MAUVAIS")
     try:
         # Open DB File
         sql_db = db.SqlDb(cfg.DB_FILE_NAME, cfg.DB_SCHEMA_TABLE)

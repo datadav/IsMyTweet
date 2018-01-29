@@ -42,7 +42,7 @@
         /* ALLOWS FOR FLUID TABLES */
         .wrapper {
           width: 100% !important;
-        	max-width: 100% !important;
+            max-width: 100% !important;
         }
 
         /* ADJUSTS LAYOUT OF LOGO IMAGE */
@@ -144,9 +144,7 @@
                         <table width="100%" border="0" cellspacing="0" cellpadding="0">
                              <tr>
                                 <td class="padding" align="center">
-                                    <a href="http://litmus.com" target="_blank">
-                                        <img src="{{email}}" width="150" height="150" border="0" alt="Insert alt text here" style="display: block; color: #666666;  font-family: Helvetica, arial, sans-serif; font-size: 16px;" class="img-max">
-                                    </a>
+                                    <img src="{{profile_image}}" width="250" height="250" border="0" alt="Insert alt text here" style="display: block; color: #666666;  font-family: Helvetica, arial, sans-serif; font-size: 16px; padding-bottom: 30px" class="img-max">
                                 </td>
                             </tr>
                             <tr>
@@ -154,9 +152,11 @@
                                     <!-- COPY -->
                                     <table width="100%" border="0" cellspacing="0" cellpadding="0">
                                         <tr>
-                                            <td align="center" style="font-size: 50px; font-family: Helvetica, Arial, sans-serif; color: #333333;" class="padding"> {{ screen_name}} your account is now secure</td>
+                                            <td align="center" style="font-size: 50px; font-family: Helvetica, Arial, sans-serif; color:#0084b4; font-style: italic;" class="padding">@{{screen_name}}</td>
                                         </tr>
-
+                                        <tr>
+                                            <td align="center" style="font-size: 50px; font-family: Helvetica, Arial, sans-serif; color:#666666;" class="padding">Your account is now secured</br></td>
+                                        </tr>
                                         <tr>
                                             <td align="center" style="padding: 20px 0 0 0; font-size: 16px; line-height: 25px; font-family: Helvetica, Arial, sans-serif; color: #666666;" class="padding"> You will now receive a notification as soon as unauthorised author will try to tweet on your behalf</td>
                                         </tr>

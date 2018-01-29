@@ -5,5 +5,6 @@ CREATE TABLE IF NOT EXISTS users (
     Email varchar(255) NOT NULL UNIQUE,
     Id_Last_Tweet int,
     Creation_Date date,
-    Notification_By_Mail int
+    Notification_By_Mail int,
+    Tweet_List text
 );

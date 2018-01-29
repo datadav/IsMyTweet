@@ -98,7 +98,7 @@ def validation():
     return render_template('validation.html', 
         screen_name=user_dic['screen_name'], 
         email=user_dic['email'],
-        profile_image=user_dic['profile_image'])
+        profile_image=user_dic['profile_image'].replace("_normal", ""))
 
 
 @app.route('/oauth-authorized')

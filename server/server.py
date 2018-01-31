@@ -1,12 +1,12 @@
 import SqlDb as db
 import sys
-#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
 import config as cfg
 import socket
 import pickle
 import time
-#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
-#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\notification')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\model_ml')
+sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\notification')
 from notification.email_sending import notification as ntf
 from model_ml import ProcUnit as pu
 from threading import Thread, Lock

@@ -4,7 +4,7 @@
 
 *Authors : Alexis AMSELLEM, David BLOCH, David Jacob COHEN, David COHEN*
 
-This repository is the Hackathon ITC 2018 app we created.  
+This repository is the App we created during a Hackathon hosted by Israel Tech Challenge 2018 cohort. For information about Israel Tech Challenge please go to <https://www.israeltechallenge.com/>  
 IsMyTweet is an app that allows influencer twitter to be folow and detect whether the content of new message tweeted comply to the usual style of the influencer.
 For now the app isn't still deployed, but you can use it in local by running the app Flask.  
  

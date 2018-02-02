@@ -2,7 +2,10 @@ from flask import Flask, request, redirect, url_for, session, g, flash, \
      render_template
 from flask_oauth import OAuth
 import sys
-sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+#sys.path.append('C:\\Users\\david\\CloudStation\\ITC\\IsMyTweet\\')
+
+import sys
+sys.path.insert(0, "../")
 import config as cfg
 import socket
 import pickle

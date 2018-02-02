@@ -9,7 +9,7 @@ IsMyTweet is an app that allows influencer twitter to be folow and detect whethe
 For now the app isn't still deployed, but you can use it in local by running the app Flask.  
  
 
-###Installations   
+### Installations   
 InIsMytTweet uses an "intelligent" algorithm containing  Machine Learning and Natural Language Processing to detect the most suspicous tweets.  
 See requirements.txt for the list of all the required packages.  
 Creating a virtual environment is recommanded, then you can install all the requirements  
